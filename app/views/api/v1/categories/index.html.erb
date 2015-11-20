@@ -1,0 +1,36 @@
+<p>
+	<%= button_to "Home", api_v1_admin_index_url, :method => :get %>
+</p>
+<h2>Add Category</h2>
+<p>
+	<%= button_to "Create Category", new_api_v1_category_url, :method => :get %>
+</p>
+<h2>Category List</h2>
+
+<div>
+	<table border = 1.0>
+	  <thead>
+	    <tr>
+	      <td>Category Name</td>
+	      <td>Parent Category</td>
+	      <td>Action</td>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	<% @categories.each do |category| %>
+	  	<% @parent = Category.find(category.parent_category_id) rescue nil %>
+	      <tr>
+	      	<td><%= category.category_name %></td>
+          	<td><%= if @parent 
+          			@parent.category_name
+          		else
+          			nil
+          		end %>
+          	</td>
+			<td><%= link_to 'Delete', api_v1_category_path(category), :method => :delete %>
+		</td>
+	      </tr>
+	    <%- end -%>
+	  </tbody>
+	</table>
+</div>

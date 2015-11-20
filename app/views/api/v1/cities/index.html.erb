@@ -1,0 +1,27 @@
+<p>
+	<%= button_to "Home", api_v1_admin_index_url, :method => :get %>
+</p>
+<h2>Add City</h2>
+<p>
+	<%= button_to "Create City", new_api_v1_city_url, :method => :get %>
+</p>
+<h1>City List</h1>
+<div>
+	<table border = 1.0>
+	  <thead>
+	    <tr>
+	      <td>City Name</td>
+	      <td>Action</td>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  	<% @cities.each do |city| %>
+	      <tr>
+	      	<td><%= city.city_name %></td>
+			<td><%= link_to 'Delete', api_v1_city_path(city), :method => :delete %>
+			</td>
+	      </tr>
+	    <%- end -%>
+	  </tbody>
+	</table>
+</div>

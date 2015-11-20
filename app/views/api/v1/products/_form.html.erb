@@ -1,0 +1,30 @@
+<%= form_for :product, url: api_v1_products_path do|f| %>
+  <p>
+    <%= f.select :category_id, Category.all.collect{|st| [st.category_name, st.id]} %><br>
+  </p>
+  <p>
+    <%= f.label :product_name %><br>
+    <%= f.text_field :p_name %>
+  </p>
+  <p>
+  <%= f.fields_for :product_price do |builder| %>
+    <p>
+      <%= builder.label :price %><br>
+      <%= builder.text_field :price %>
+    </p>
+    <p>
+      <%= builder.label :unit %><br>
+      <%= builder.text_field :unit %>
+    </p>
+<br>
+    <p>
+    <%= f.select :city_id, City.all.collect{|st| [st.city_name, st.id]} %><br>
+    </p>
+   
+  <% end %>
+ </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

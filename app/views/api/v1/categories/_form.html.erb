@@ -1,0 +1,15 @@
+<%= form_for :product_category, url: api_v1_categories_path do|f| %>
+  <p>
+    <%= f.label :Parent_Category %><br>
+    <%= f.select :parent_category_id, @parentList.collect{|st| [st.category_name, st.id]}, :include_blank => true %>
+    <br>
+  </p>
+  <p>
+    <%= f.label :category_name %><br>
+    <%= f.text_field :category_name %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
