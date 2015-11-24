@@ -44,51 +44,60 @@ class Api::V1::CategoriesController < ApplicationController
 	end
 
 	def getChildCategoriesOrProducts
-		@parent_category = Category.find_by(:category_name => params[:category_name]) rescue nil
+		@parent_category = Category.find(params[:categoryid]) rescue nil
 		@items = []
 		@item_price = []
 		if @parent_category
-			@category = Category.where(:parent_category_id => @parent_category.id)
+			@category = Category.where(:parent_category_id => params[:categoryid])
 			city = City.find_by(:city_name => params[:city].upcase!) rescue nil
 			if @category.count > 0
 				i = 0
 				@category.count.times do
-					@items << @category[i].products
+					@prod_prices = []
+					@prods = @category[i].products
 					j = 0
 					@category[i].products.count.times do
 						prod = @category[i].products[j]
 						prod_price = ProductPrice.where(:product_id => prod.id, :city_id => city.id)
 						if prod_price.count <= 0
-							@items = @items - prod.to_a
+							@prods = @prods - prod.to_a
+						else
+							@prod_prices << prod_price[0]
 						end
-						@item_price << prod_price
 						j += 1
 					end
+					@items << @prods
+					@item_price << @prod_prices
 					i += 1
 				end
 			else
 				byebug
-				@items << @parent_category.products
+				@prods = @parent_category.products
+				@prod_prices = []
 				j = 0
 				@parent_category.products.count.times do
 					prod = @parent_category.products[j]
 					prod_price = ProductPrice.where(:product_id => prod.id, :city_id => city.id)
 					if prod_price.count <= 0
 						byebug
-						@items = @items - prod.to_a
+						@prods = @prods - prod.to_a
+					else
+						@prod_prices << prod_price[0]
 					end
-					@item_price << prod_price
+					
 					j += 1
 				end
+				@items = @prods
+				@item_price = @prod_prices
 
-				if @item_price.count < @items.count
-					k =0
-					@items.count.times do 
-						item = @items[k]
-						if @item_price.include?(item)
-						end
-					end
-				end
+				# if @item_price.count < @items.count
+				# 	k =0
+				# 	@items.count.times do 
+				# 		item = @items[k]
+				# 		if @item_price.include?(item)
+				# 		end
+				# 	end
+				# end
 			end
 		end
 
